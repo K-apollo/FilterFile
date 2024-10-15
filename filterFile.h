@@ -7,6 +7,8 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <dirent.h>
+#include <libgen.h>
+#include <errno.h>
 
 #ifdef _WIN32
     #include <windows.h>
@@ -17,7 +19,6 @@
     #define PATH_SEPARATOR '/'
 #endif
 
-// 파일 처리에 필요한 정보를 저장하는 구조체
 typedef struct FileProcessor {
     time_t now;              // 현재 시간
     char home_dir[1024];      // 홈 디렉토리 경로
@@ -28,10 +29,8 @@ typedef struct FileProcessor {
     int year, month, day, hour, minute;  // 날짜/시간 입력값 저장
 } FileProcessor;
 
-// 전역으로 사용할 FileProcessor 구조체 선언
 extern FileProcessor file_processor;
 
-// 함수 선언
 const char *get_home_dir();
 time_t get_last_modified_time(const char *path);
 int move_file(const char *src, const char *dest);
@@ -42,5 +41,6 @@ void write_log(const char *src, const char *dest, double diff_days, int is_dupli
 void get_user_datetime_input();
 void get_user_extensions_input();
 void modify_paths();
+int create_directory_recursively(const char *path);
 
 #endif // FILTERFILE_H
